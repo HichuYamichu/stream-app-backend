@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-const appPath = "G:/Videos/streamer-app-vids/"
+const appPath = "G:/Videos/stream-app-vids/"
 
 var ctx = context.TODO()
 

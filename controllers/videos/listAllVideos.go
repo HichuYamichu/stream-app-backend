@@ -3,7 +3,7 @@ package videos
 import (
 	"encoding/json"
 	"fmt"
-	MongoDB "github.com/HichuYamichu/stream-app-server/storage"
+	"github.com/HichuYamichu/stream-app-server/storage"
 	"github.com/HichuYamichu/stream-app-server/structs"
 	"go.mongodb.org/mongo-driver/bson"
 	"net/http"
@@ -14,7 +14,7 @@ func ListAllVideos(res http.ResponseWriter, req *http.Request) {
 
 	var videos []structs.Video
 	filter := bson.M{}
-	cursor, err := MongoDB.DB.Collection("videos").Find(ctx, filter)
+	cursor, err := storage.DB.Collection("videos").Find(ctx, filter)
 	if err != nil {
 		handleErr(err, res)
 		return
