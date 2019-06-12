@@ -1,58 +1,57 @@
-package videos
+package app
 
 import (
 	"bufio"
 	"bytes"
 	"fmt"
-	"github.com/HichuYamichu/stream-app-server/storage"
-	"go.mongodb.org/mongo-driver/bson"
 	"io"
 	"log"
 	"net/http"
 	"os"
 	"os/exec"
+
+	"github.com/HichuYamichu/stream-app-server/db"
 )
 
-func Upload(res http.ResponseWriter, req *http.Request) {
+const appPath = "G:/Videos/stream-app-vids/"
+
+// UploadVideo : uploads video
+func UploadVideo(res http.ResponseWriter, req *http.Request) {
 	file, _, err := req.FormFile("video")
 	if err != nil {
-		handleErr(err, res)
+		log.Fatal(err)
 		return
 	}
 	defer file.Close()
 
 	req.ParseForm()
-	fmt.Println(req.Form["title"])
-	_, err = storage.DB.Collection("videos").InsertOne(ctx, bson.M{
-		"title": req.Form["title"][0],
-		"desc":  req.Form["desc"][0],
-	})
+	videoName := db.InsertVideo(req.Form["title"][0], req.Form["desc"][0])
+
 	if err != nil {
-		handleErr(err, res)
+		log.Fatal(err)
 		return
 	}
 
-	videoName := req.Form["title"][0]
+	// videoName := req.Form["title"][0]
 	os.MkdirAll(appPath+videoName, os.ModePerm)
 	newFile, err := os.Create(appPath + videoName + "/" + videoName + ".mp4")
 	if err != nil {
-		handleErr(err, res)
+		log.Fatal(err)
 		return
 	}
 	newImg, err := os.Create(appPath + videoName + "/" + videoName + ".jpeg")
 	if err != nil {
-		handleErr(err, res)
+		log.Fatal(err)
 		return
 	}
 	defer newImg.Close()
 
-	fmt.Printf("File name %s\n", videoName)
-	numBytesWritten, err := io.Copy(newFile, file)
+	// fmt.Printf("File name %s\n", videoName)
+	_, err = io.Copy(newFile, file)
 	if err != nil {
-		handleErr(err, res)
+		log.Fatal(err)
 		return
 	}
-	log.Printf("Downloaded %d byte file.\n", numBytesWritten)
 
 	filename := appPath + videoName + "/" + videoName + ".mp4"
 	width := 640

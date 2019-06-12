@@ -1,19 +1,19 @@
-package videos
+package app
 
 import (
-	"fmt"
-	"github.com/gorilla/mux"
 	"image/jpeg"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/gorilla/mux"
 )
 
-func ServeVideoMiniatures(res http.ResponseWriter, req *http.Request) {
+// ServeMiniature : servs video miniature
+func ServeMiniature(res http.ResponseWriter, req *http.Request) {
 	params := mux.Vars(req)
 	// G:\Videos\stream-app-vids\fuk
-	path := "G:/Videos/stream-app-vids/" + params["name"] + "/" + params["name"] + ".jpeg"
-	fmt.Println(path)
+	path := "G:/Videos/stream-app-vids/" + params["id"] + "/" + params["id"] + ".jpeg"
 	file, err := os.Open(path)
 	if err != nil {
 		log.Fatal(err)
