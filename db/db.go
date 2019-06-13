@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"log"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -13,17 +12,19 @@ import (
 var VideoColl *mongo.Collection
 
 // CTX : db context
-var CTX, _ = context.WithTimeout(context.Background(), 30*time.Second)
+var CTX context.Context
 
 // Connect : conntect to MongoDB instance
 func Connect() {
 	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
+	CTX, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
 	err = client.Connect(CTX)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	VideoColl = client.Database("stream-app").Collection("videos")
 }
