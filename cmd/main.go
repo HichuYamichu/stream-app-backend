@@ -23,8 +23,5 @@ func main() {
 		ReadTimeout:  15 * time.Second,
 	}
 	fmt.Println("Serving on port 3000")
-
 	log.Fatal(srv.ListenAndServe())
-	// log.Fatal(http.ListenAndServe("127.0.0.1:3000", appRouter))
-
 }
