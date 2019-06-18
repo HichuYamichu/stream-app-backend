@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"os"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -16,7 +17,8 @@ var CTX context.Context
 
 // Connect : conntect to MongoDB instance
 func Connect() {
-	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://localhost:27017"))
+	addr := os.Getenv("MONGO")
+	client, err := mongo.NewClient(options.Client().ApplyURI(addr))
 	if err != nil {
 		panic(err)
 	}

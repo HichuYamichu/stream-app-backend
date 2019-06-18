@@ -1,0 +1,16 @@
+version: '3'
+services:
+  mongo:
+    container_name: stream-app-db
+    image: mongo
+    command: mongod --port 27018
+    ports: 
+      - '27018:27018'
+  app:
+    container_name: stream-app
+    restart: always
+    build: .
+    ports:
+      - '3001:3001'
+    depends_on:
+      - mongo

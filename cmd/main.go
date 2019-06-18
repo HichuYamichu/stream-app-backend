@@ -18,10 +18,10 @@ func main() {
 
 	srv := &http.Server{
 		Handler:      handlers.LoggingHandler(os.Stdout, r),
-		Addr:         "127.0.0.1:3000",
+		Addr:         "0.0.0.0:3001",
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
-	fmt.Println("Serving on port 3000")
+	fmt.Println("Serving on port 3001")
 	log.Fatal(srv.ListenAndServe())
 }
